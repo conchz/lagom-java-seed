@@ -1,0 +1,19 @@
+language: scala
+sudo: false
+jdk:
+  - oraclejdk8
+env:
+  - ACTIVATOR_BIN=${TRAVIS_BUILD_DIR}/bin/activator
+before_install:
+  - chmod +x ${ACTIVATOR_BIN}
+  - unset SBT_OPTS JVM_OPTS
+script:
+  - ${ACTIVATOR_BIN} -J-Xss2m ++${TRAVIS_SCALA_VERSION} clean compile
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+before_cache:
+  # Ensure changes to the cache aren't persisted
+  - rm -rf $HOME/.ivy2/cache/sample.helloworld/hello*
+  # Delete all ivydata files since ivy touches them on each build
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" | xargs rm
